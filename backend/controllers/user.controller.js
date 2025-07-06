@@ -1,4 +1,4 @@
-const { json } = require("express");
+
 const userModel = require("../models/user.model")
 const userService = require("../services/user.service")
 const {validationResult} = require("express-validator");
@@ -15,13 +15,13 @@ module.exports.registerUser =  async function (req,res, next) {
  if(isUserAlreadyExist){
   return res.status(400).json({massage : "user Allready exist "})
  }
- const hashPassword = await userModel.hashPassword(password);
- 
+ const hashedPassword = await userModel.hashPassword(password);
+
   const user = await userService.createUser({
     firstname : fullname.firstname,
     lastname : fullname.lastname,
     email,
-    password: hashPassword
+    password: hashedPassword
   });
 
  const token =user.generateAuthToken();

@@ -318,6 +318,24 @@ curl -X GET http://localhost:3000/users/logout \
 - `401 Unauthorized` - Authentication required
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Captain Registration Endpoint Documentation
 
 ## POST `/captains/register`
@@ -455,3 +473,162 @@ curl -X POST http://localhost:3000/captains/register \
 - `201 Created` - Captain registered successfully
 - `400 Bad Request` - Validation failed or captain already exists
 - `500 Internal Server Error` -
+
+
+
+
+
+
+
+
+
+
+## POST `/captains/login`
+
+Login as a captain.
+
+### **Request Body**
+
+```json
+{
+  "email": "ali@example.com",     // required, string, valid email
+  "password": "yourpassword"      // required, string, min 6 chars
+}
+```
+
+### **Success Response (200 OK)**
+
+```json
+{
+  "token": "<jwt_token>",
+  "captain": {
+    "_id": "<captain_id>",
+    "fullname": {
+      "firstname": "Ali",
+      "lastname": "Ahmed"
+    },
+    "email": "ali@example.com",
+    "status": "inactive",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "socketId": null,
+    "location": {
+      "lat": null,
+      "lng": null
+    },
+    "__v": 0
+  }
+}
+```
+
+### **Validation Error (400 Bad Request)**
+
+```json
+{
+  "errors": [
+    {
+      "msg": "invalid Email", // or other validation messages
+      "param": "email",
+      "location": "body"
+    }
+    // ...other errors
+  ]
+}
+```
+
+### **Authentication Error (401/404 Unauthorized/Not Found)**
+
+```json
+{
+  "message": "invalid email or password"
+}
+```
+
+### **Server Error (500 Internal Server Error)**
+
+```json
+{
+  "error": "Error message"
+}
+```
+
+---
+
+## GET `/captains/profile`
+
+Get the authenticated captain's profile.
+
+### **Headers**
+
+- `Authorization: Bearer <jwt_token>` (if not using cookies)
+
+### **Success Response (200 OK)**
+
+```json
+{
+  "_id": "<captain_id>",
+  "fullname": {
+    "firstname": "Ali",
+    "lastname": "Ahmed"
+  },
+  "email": "ali@example.com",
+  "status": "inactive",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  },
+  "socketId": null,
+  "location": {
+    "lat": null,
+    "lng": null
+  },
+  "__v": 0
+}
+```
+
+### **Authentication Error (401 Unauthorized)**
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+## GET `/captains/logout`
+
+Logout the authenticated captain.
+
+### **Headers**
+
+- `Authorization: Bearer <jwt_token>` (if not using cookies)
+
+### **Success Response (200 OK)**
+
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+### **Authentication Error (401 Unauthorized)**
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+### **Server Error (500 Internal Server Error)**
+
+```json
+{
+  "error": "Error message"
+}
