@@ -316,3 +316,142 @@ curl -X GET http://localhost:3000/users/logout \
 
 - `200 OK` - Logout successful
 - `401 Unauthorized` - Authentication required
+
+
+# Captain Registration Endpoint Documentation
+
+## POST `/captains/register`
+
+Registers a new captain (driver) in the system.
+
+---
+
+### **Description**
+
+This endpoint allows a new captain to register by providing their name, email, password, and vehicle details. The data is validated before creating the captain. On successful registration, a JWT token and captain data are returned.
+
+---
+
+### **Request Body**
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "fullname": {
+    "firstname": "Ali",
+    "lastname": "Ahmed"
+  },
+  "email": "ali@example.com",
+  "password": "yourpassword",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+#### **Field Requirements**
+
+- `fullname.firstname`: string, required, minimum 3 characters
+- `fullname.lastname`: string, required, minimum 3 characters
+- `email`: string, required, must be a valid email
+- `password`: string, required, minimum 6 characters
+- `vehicle.color`: string, required, minimum 3 characters
+- `vehicle.plate`: string, required, minimum 3 characters
+- `vehicle.capacity`: integer, required, minimum 1
+- `vehicle.vehicleType`: string, required, one of: `car`, `bike`, `auto`
+
+---
+
+### **Responses**
+
+#### **Success (201 Created)**
+
+```json
+{
+  "captain": {
+    "_id": "<captain_id>",
+    "fullname": {
+      "firstname": "Ali",
+      "lastname": "Ahmed"
+    },
+    "email": "ali@example.com",
+    "status": "inactive",
+    "vehicle": {
+      "color": "Red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "socketId": null,
+    "location": {
+      "lat": null,
+      "lng": null
+    },
+    "__v": 0
+  },
+  "token": "<jwt_token>"
+}
+```
+
+#### **Validation Error (400 Bad Request)**
+
+```json
+{
+  "errors": [
+    {
+      "msg": "Color must be at least 3 characters long",
+      "param": "vehicle.color",
+      "location": "body"
+    }
+    // ...other errors
+  ]
+}
+```
+
+#### **Duplicate Email (400 Bad Request)**
+
+```json
+{
+  "message": "captain already exist"
+}
+```
+
+#### **Server Error (500 Internal Server Error)**
+
+```json
+{
+  "error": "Error message"
+}
+```
+
+---
+
+### **Example Request**
+
+```bash
+curl -X POST http://localhost:3000/captains/register \
+-H "Content-Type: application/json" \
+-d '{
+  "fullname": { "firstname": "Ali", "lastname": "Ahmed" },
+  "email": "ali@example.com",
+  "password": "yourpassword",
+  "vehicle": {
+    "color": "Red",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}'
+```
+
+---
+
+### **Status Codes**
+
+- `201 Created` - Captain registered successfully
+- `400 Bad Request` - Validation failed or captain already exists
+- `500 Internal Server Error` -
