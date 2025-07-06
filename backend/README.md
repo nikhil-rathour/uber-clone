@@ -92,3 +92,108 @@ curl -X POST http://localhost:3000/users/register \
 
 - `200 OK` - User registered successfully
 - `400 Bad Request` - Validation failed (missing or invalid fields)
+
+---
+
+# User Login Endpoint Documentation
+
+## POST `/users/login`
+
+Authenticates a user and returns a JWT token.
+
+---
+
+### **Description**
+
+This endpoint allows an existing user to log in using their email and password. If the credentials are valid, a JWT token and user data are returned.
+
+---
+
+### **Request Body**
+
+Send a JSON object with the following structure:
+
+```json
+{
+  "email": "johndoe@example.com",
+  "password": "yourpassword"
+}
+```
+
+#### **Field Requirements**
+
+- `email`: string, required, must be a valid email
+- `password`: string, required, minimum 6 characters
+
+---
+
+### **Responses**
+
+#### **Success (200 OK)**
+
+```json
+{
+  "token": "<jwt_token>",
+  "user": {
+    "_id": "<user_id>",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com",
+    "password": "<hashed_password>",
+    "socketId": null,
+    "__v": 0
+  }
+}
+```
+
+#### **Validation Error (400 Bad Request)**
+
+```json
+{
+  "errors": [
+    {
+      "msg": "invalid Email",
+      "param": "email",
+      "location": "body"
+    }
+    // ...other errors
+  ]
+}
+```
+
+#### **Authentication Error (401 Unauthorized)**
+
+```json
+{
+  "massage": "invalid email or password"
+}
+```
+or
+```json
+{
+  "message": "invali email or password"
+}
+```
+
+---
+
+### **Example Request**
+
+```bash
+curl -X POST http://localhost:3000/users/login \
+-H "Content-Type: application/json" \
+-d '{
+  "email": "johndoe@example.com",
+  "password": "yourpassword"
+}'
+```
+
+---
+
+### **Status Codes**
+
+- `200 OK` - Login successful
+- `400 Bad Request` - Validation failed (missing or invalid fields)
+- `401 Unauthorized` - Invalid email or password
