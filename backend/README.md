@@ -197,3 +197,122 @@ curl -X POST http://localhost:3000/users/login \
 - `200 OK` - Login successful
 - `400 Bad Request` - Validation failed (missing or invalid fields)
 - `401 Unauthorized` - Invalid email or password
+
+---
+
+# User Profile Endpoint Documentation
+
+## GET `/users/profile`
+
+Returns the authenticated user's profile information.
+
+---
+
+### **Description**
+
+This endpoint returns the profile data of the currently authenticated user. The request must include a valid JWT token (usually sent as a cookie or in the `Authorization` header).
+
+---
+
+### **Headers**
+
+- `Authorization: Bearer <jwt_token>` (if not using cookies)
+
+---
+
+### **Responses**
+
+#### **Success (200 OK)**
+
+```json
+{
+  "_id": "<user_id>",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "johndoe@example.com",
+  "socketId": null,
+  "__v": 0
+}
+```
+
+#### **Authentication Error (401 Unauthorized)**
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+---
+
+### **Example Request**
+
+```bash
+curl -X GET http://localhost:3000/users/profile \
+-H "Authorization: Bearer <jwt_token>"
+```
+
+---
+
+### **Status Codes**
+
+- `200 OK` - Profile returned successfully
+- `401 Unauthorized` - Authentication required
+
+---
+
+# User Logout Endpoint Documentation
+
+## GET `/users/logout`
+
+Logs out the authenticated user.
+
+---
+
+### **Description**
+
+This endpoint logs out the currently authenticated user by clearing the authentication token cookie. The request must include a valid JWT token (usually sent as a cookie or in the `Authorization` header).
+
+---
+
+### **Headers**
+
+- `Authorization: Bearer <jwt_token>` (if not using cookies)
+
+---
+
+### **Responses**
+
+#### **Success (200 OK)**
+
+```json
+{
+  "message": "logout successfully"
+}
+```
+
+#### **Authentication Error (401 Unauthorized)**
+
+```json
+{
+  "message": "Authentication required"
+}
+```
+
+---
+
+### **Example Request**
+
+```bash
+curl -X GET http://localhost:3000/users/logout \
+-H "Authorization: Bearer <jwt_token>"
+```
+
+---
+
+### **Status Codes**
+
+- `200 OK` - Logout successful
+- `401 Unauthorized` - Authentication required
