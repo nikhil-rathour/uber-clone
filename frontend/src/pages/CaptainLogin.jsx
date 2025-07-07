@@ -1,0 +1,75 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { useState } from 'react'
+
+const CaptainLogin = () => {
+
+ 
+   const [email, setemail] = useState("")
+   const [password, setpassword] = useState("")
+ 
+   
+ 
+   const submithendeler = (e) => {
+     e.preventDefault();
+     // console.log("hyyyy");
+ 
+   }
+
+  return (
+    <div className="flex flex-col  justify-center p-5  ">
+      <Link to="/login">
+
+        <img
+          className='   w-8  '
+          src="resetImage.png" />
+      </Link>
+      <img
+        className='  mb-10  mx-auto w-48'
+        src="https://cdn-assets-us.frontify.com/s3/frontify-enterprise-files-us/eyJwYXRoIjoicG9zdG1hdGVzXC9hY2NvdW50c1wvODRcLzQwMDA1MTRcL3Byb2plY3RzXC8yN1wvYXNzZXRzXC9lZFwvNTUwOVwvNmNmOGVmM2YzMjFkMTA3YThmZGVjNjY1NjJlMmVmMzctMTYyMDM3Nzc0OC5haSJ9:postmates:9KZWqmYNXpeGs6pQy4UCsx5EL3qq29lhFS6e4ZVfQrs?width=2400"
+        alt="" />
+
+    <form onSubmit={(e) => submithendeler(e)}>
+        <h3 className=' text-xl font-medium'>What's your email & password?</h3>
+        <input
+          value={email}
+          onChange={(e) => setemail(e.target.value)}
+          type="email"
+          required
+          className='mt-3 p-2 mb-3  rounded w-full px-4 border shadow-sm bg-[#eeeee]'
+          name="email"
+          id="email"
+          autoComplete="email"
+          autoFocus
+          placeholder="Enter your email"
+        />
+
+        <input
+          value={password}
+          onChange={(e) => setpassword(e.target.value)}
+
+          type="password"
+          required
+          className='mt-2 p-2 mb-1 rounded w-full px-4 border shadow-sm bg-[#eeeee]'
+          name="password"
+          id="password"
+          autoComplete="current-password"
+          placeholder="Enter your password"
+        />
+       
+          <button className='bg-black text-white font-medium py-2 px-4 mt-5 rounded-lg w-full text-lg justify-between items-center'
+          > Login as Captain
+          </button>
+
+       
+
+        <p className='mt-2 text-sm'>Don't have an account? <Link to='/captain-signup' className='text-blue-500'>Sign Up</Link></p>
+        <p className='mt-4 text-sm'>By clicking Login you agree to our <span className='text-blue-500'>Terms of Service</span> and <span className='text-blue-500'>Privacy Policy</span>.</p>
+
+      </form>
+
+    </div>
+  )
+}
+
+export default CaptainLogin
