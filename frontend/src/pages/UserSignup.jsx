@@ -1,19 +1,25 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { UserDataContext } from '../context/UserContext'
+
+
 
 const UserSignup = () => {
   const [firstname, setFisrtname] = useState("")
   const [lastname, setLastname] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [userData, setuserData] = useState({})
+  // const [userData, setuserData] = useState({})
+
+  const navigate = useNavigate()
+  const {user , setUser} =  useContext(UserDataContext)
 
 
-  const hendelSubmit =(e)=>{
+  const hendelSubmit = async (e)=>{
     e.preventDefault()
     // console.log('H"Yhyhyhyhyhy');
-    setuserData({
+     const newUser ={
       fullname : {
         firstname : firstname,
         lastname : lastname
@@ -21,7 +27,19 @@ const UserSignup = () => {
       email : email,
       password : password
 
-    })
+    }
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register` , newUser)
+    if(response.status === 200){
+      const data = response.data
+      setUser(data.user)
+      localStorage.setItem('token', data.token)
+      navigate("/home")
+    }else{
+      alert("internal server error")
+    }
+
+
     setFisrtname("")
     setLastname("")
     setEmail("")
