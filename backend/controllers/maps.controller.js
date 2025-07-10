@@ -1,5 +1,5 @@
-const { application } = require('express');
-const mapService = require('../services/maps.service');
+
+const mapsService  = require("../services/maps.service")
 const { validationResult } = require('express-validator');
 
 
@@ -10,7 +10,7 @@ module.exports.getCoordinates = async (req, res) => {
     }
     const { address } = req.query;
     try {
-        const coordinates = await mapService.getAddressCoordinate(address);
+        const coordinates = await mapsService.getAddressCoordinate(address);
         res.status(200).json({ coordinates });
     } catch (error) {
         res.status(404).json({ message: "coordinates not found" });
@@ -40,7 +40,7 @@ module.exports.getAutocompleteSuggestions = async (req, res, next) => {
             return res.status(400).json("address query is required");
         }
         const { input } = req.query;
-        const suggestions = await mapService.getAutocompleteSuggestions(input);
+        const suggestions = await mapsService.getAutoCompleteSuggestions(input);
         res.status(200).json(suggestions);
     }catch(error){
         next(error);
