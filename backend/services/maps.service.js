@@ -58,17 +58,27 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
     }
 
     const apiKey = process.env.GOOGLE_MAPS_API;
+    if (!apiKey) {
+        throw new Error('Google Maps API key is not configured');
+    }
+
     const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${apiKey}`;
+    // console.log('Making request to Google Maps API with input:', input);
 
     try {
         const response = await axios.get(url);
+        // console.log('Google Maps API response status:', response.data.status);
+        
         if (response.data.status === 'OK') {
-            return response.data.predictions.map(prediction => prediction.description).filter(value => value);
+            const suggestions = response.data.predictions.map(prediction => prediction.description).filter(value => value);
+            // console.log('Found suggestions:', suggestions);
+            return suggestions;
         } else {
-            throw new Error('Unable to fetch suggestions');
+            console.error('Google Maps API error:', response.data);
+            throw new Error(`Unable to fetch suggestions: ${response.data.status}`);
         }
     } catch (err) {
-        console.error(err);
+        console.error('Error in getAutoCompleteSuggestions:', err);
         throw err;
     }
 }

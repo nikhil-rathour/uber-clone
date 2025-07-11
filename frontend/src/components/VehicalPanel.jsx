@@ -14,6 +14,7 @@ const VehicalPanel = (props) => {
           <div  
           onClick={()=>{
             props.setConfirmRidePanel(true)
+            props.selectVehicle('car')
           }}
           className=' flex border-2 active:border-black mb-2 rounded-xl w-full items-center justify-between'>
           <img className='h-12' src="https://th.bing.com/th/id/OIP.ymjpxr4RPlwbLenCbbpYywHaE7?w=267&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="" />
@@ -22,12 +23,14 @@ const VehicalPanel = (props) => {
             <p className=' font-medium text-sm'>2 mins away</p>
             <p className='text-xs mb-1 text-gray-900'>Affordable, compact rides</p>
           </div>
-          <h2 className='text-xl font-semibold m-2 '>₹192.20</h2>
+          <h2 className='text-xl font-semibold m-2 '>₹{props.fare.car}</h2>
         </div>
 
         <div 
           onClick={()=>{
             props.setConfirmRidePanel(true)
+            props.selectVehicle('moto')
+
           }}
         className=' flex border-2 active:border-black mb-2 rounded-xl w-full items-center justify-between'>
           <img className='h-12' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_637/v1649231091/assets/2c/7fa194-c954-49b2-9c6d-a3b8601370f5/original/Uber_Moto_Orange_312x208_pixels_Mobile.png" alt="" />
@@ -36,12 +39,14 @@ const VehicalPanel = (props) => {
             <p className=' font-medium text-sm'>2 mins away</p>
             <p className='text-xs mb-1 text-gray-900'>Affordable, compact rides</p>
           </div>
-          <h2 className='text-xl font-semibold m-2 '>₹35.20</h2>
+          <h2 className='text-xl font-semibold m-2 '>₹{props.fare.moto}</h2>
         </div>
 
           <div
              onClick={()=>{
             props.setConfirmRidePanel(true)
+            props.selectVehicle('auto')
+
           }}
           className=' flex border-2 active:border-black mb-2 rounded-xl w-full items-center justify-between'>
           <img className='h-12' src="https://clipart-library.com/2023/Uber_Auto_312x208_pixels_Mobile.png" alt="" />
@@ -50,7 +55,7 @@ const VehicalPanel = (props) => {
             <p className=' font-medium text-sm'>2 mins away</p>
             <p className='text-xs mb-1 text-gray-900'>Affordable, compact rides</p>
           </div>
-          <h2 className='text-xl font-semibold m-2 '>₹60.20</h2>
+          <h2 className='text-xl font-semibold m-2 '>₹{props.fare.auto}</h2>
         </div>
 
     </div>
