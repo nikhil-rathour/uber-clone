@@ -13,8 +13,9 @@ const CaptainLogin = () => {
     const navigate = useNavigate()
     const { captain , setCaptain} = useContext(CaptainDataContext)
  
+    // console.log(captain);
+    
    
- 
    const submithendeler = async (e) => {
      e.preventDefault();
     const CaptainData = {

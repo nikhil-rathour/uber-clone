@@ -66,7 +66,7 @@ module.exports.loginCaptain = async (req, res ,  next) => {
 module.exports.getCaptainProfile = async (req, res, next) => {
     try {
         const captain = req.captain;
-        return res.status(200).json(captain);
+        return res.status(200).json({captain});
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
