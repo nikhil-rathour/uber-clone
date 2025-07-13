@@ -5,6 +5,12 @@ import { CaptainDataContext } from '../context/CaptainContext'
 import { Navigate } from 'react-router-dom'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const validateEmail = (email) => {
+  return /^\S+@\S+\.\S+$/.test(email);
+};
 
 const CaptainSignup = () => {
 
@@ -24,6 +30,11 @@ const CaptainSignup = () => {
   const hendelSubmit = async(e)=>{
     e.preventDefault()
     
+    if (!validateEmail(email)) {
+      toast.error('Invalid email format');
+      return;
+    }
+
     const captainData = {
       fullname : {
         firstname : firstname,
@@ -39,14 +50,24 @@ const CaptainSignup = () => {
       }
     }
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
-    if(response.status === 201){
-      const data = response.data
-      setCaptain(data.captain)
-      localStorage.setItem("token", data.token)
-      navigate("/captain-home")
-    }else{
-      alert("internal server error")
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData);
+      if(response.status === 201){
+        const data = response.data;
+        setCaptain(data.captain);
+        localStorage.setItem("token", data.token);
+        navigate("/captain-home");
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 409) {
+          toast.error('Captain already exists');
+        } else {
+          toast.error('Registration failed. Please try again.');
+        }
+      } else {
+        toast.error('Network error. Please try again.');
+      }
     }
     
  
@@ -200,6 +221,7 @@ const CaptainSignup = () => {
 
     
   </form>
+  <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
   <p className='mt-2 text-sm'>Already have an account? <Link to='/captain-login' className='text-blue-500'>Log In</Link></p>
     <p className='mt-4 text-sm'>By clicking Create Account, you agree to our <span className='text-blue-500'>Terms of Service</span> and <span className='text-blue-500'>Privacy Policy</span>.</p>
 </div>

@@ -2,7 +2,8 @@ import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { UserDataContext } from '../context/UserContext'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const UserSignup = () => {
@@ -16,35 +17,51 @@ const UserSignup = () => {
   const {user , setUser} =  useContext(UserDataContext)
 
 
+  const validateEmail = (email) => {
+    return /^\S+@\S+\.\S+$/.test(email);
+  };
+
   const hendelSubmit = async (e)=>{
-    e.preventDefault()
-    // console.log('H"Yhyhyhyhyhy');
-     const newUser ={
+    e.preventDefault();
+
+    if (!validateEmail(email)) {
+      toast.error('Invalid email format');
+      return;
+    }
+
+    const newUser ={
       fullname : {
         firstname : firstname,
         lastname : lastname
       },
       email : email,
       password : password
-
     }
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register` , newUser)
-    if(response.status === 200){
-      const data = response.data
-      setUser(data.user)
-      localStorage.setItem('token', data.token)
-      navigate("/home")
-    }else{
-      alert("internal server error")
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register` , newUser)
+      if(response.status === 200){
+        const data = response.data
+        setUser(data.user)
+        localStorage.setItem('token', data.token)
+        navigate("/home")
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 409) {
+          toast.error('User already exists');
+        } else {
+          toast.error('Registration failed. Please try again.');
+        }
+      } else {
+        toast.error('Network error. Please try again.');
+      }
     }
 
-
-    setFisrtname("")
-    setLastname("")
-    setEmail("")
-    setPassword("")
-    
+    setFisrtname("");
+    setLastname("");
+    setEmail("");
+    setPassword("");
   }
 
   return (
@@ -127,6 +144,7 @@ const UserSignup = () => {
               > Create Account
               </button>
      </form>
+     <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
          <p className='mt-2 text-sm'>Already have an account? <Link to='/login' className='text-blue-500'>Log In</Link></p>
         <p className='mt-4 text-sm'>By clicking Create Account, you agree to our <span className='text-blue-500'>Terms of Service</span> and <span className='text-blue-500'>Privacy Policy</span>.</p>
     </div>

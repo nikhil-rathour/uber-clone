@@ -4,6 +4,13 @@ import { useState,  } from 'react'
 import { UserDataContext } from '../context/UserContext'
 import { useContext } from 'react'
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const validateEmail = (email) => {
+  // Simple email regex
+  return /^\S+@\S+\.\S+$/.test(email);
+};
 
 const UserLogin = () => {
 
@@ -21,28 +28,35 @@ const UserLogin = () => {
   const submithendeler = async (e) => {
     e.preventDefault();
     
-    const userData = {
-      email : email,
-      password : password
-
-      
+    if (!validateEmail(email)) {
+      toast.error('Invalid email format');
+      return;
     }
 
-     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login` , {email , password})
-     if(response.status = 200){
-      const data = response.data
-      setUser(data.user)
-      localStorage.setItem('token', data.token)
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, { email, password });
+      if (response.status === 200) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem('token', data.token);
+        navigate("/home");
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 404) {
+          toast.error('User does not exist');
+        } else if (error.response.status === 401) {
+          toast.error('Incorrect password');
+        } else {
+          toast.error('Login failed. Please try again.');
+        }
+      } else {
+        toast.error('Network error. Please try again.');
+      }
+    }
 
-      navigate("/home")
-      
-     }
-     
-
-
-
-    setemail("")
-    setpassword("")
+    setemail("");
+    setpassword("");
   }
 
   return (
@@ -97,6 +111,7 @@ const UserLogin = () => {
 
         
       </form>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
       <p className='mt-2 text-sm'>Don't have an account? <Link to='/signup' className='text-blue-500'>Sign Up</Link></p>
         <p className='mt-4 text-sm'>By clicking Login you agree to our <span className='text-blue-500'>Terms of Service</span> and <span className='text-blue-500'>Privacy Policy</span>.</p>
 
