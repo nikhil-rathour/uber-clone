@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -9,6 +9,9 @@ import VehicalPanel from "../components/VehicalPanel";
 import ConfirmRide from "../components/ConfirmRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
+import { SocketContext } from "../context/SocketContext";
+import { UserDataContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [pickup, setPickup] = useState("");
@@ -21,8 +24,9 @@ function Home() {
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [activeField, setActiveField] = useState(null);
-  const [fare, setFare] = useState({})
-  const [vehicleType, setVehicleType] = useState(null)
+  const [fare, setFare] = useState({});
+  const [vehicleType, setVehicleType] = useState(null);
+  const [ride , setRide] = useState()
 
   const panelRef = useRef(null);
   const vehicalPanelRef = useRef(null);
@@ -30,13 +34,15 @@ function Home() {
   const ConfermRideRef = useRef(null);
   const vehicalFoundRef = useRef(null);
   const waitingForDriverRef = useRef(null);
+  const navigate = useNavigate()
 
   // location pikup// drop location suggetion ap hendiling
 
   const handlePickupChange = async (e) => {
     setPickup(e.target.value);
     try {
-      const response = await axios.get( `${import.meta.env.VITE_BASE_URL}/maps/get-suggetions`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/maps/get-suggetions`,
         {
           params: { input: e.target.value },
           headers: {
@@ -53,7 +59,8 @@ function Home() {
   const handleDestinationChange = async (e) => {
     setDestination(e.target.value);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggetions`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/maps/get-suggetions`,
         {
           params: { input: e.target.value },
           headers: {
@@ -75,47 +82,67 @@ function Home() {
 
   async function findTrip() {
     // if (pickup != "" && destination !="" ) {
-          
-       setpenalOpen(false);
-       setvehicalPanelOpen(true); 
-     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-            params: { pickup, destination },
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }  
-        })
-       
-        
-       setFare(response.data) 
-       
-        
-        
+
+    setpenalOpen(false);
+    setvehicalPanelOpen(true);
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/rides/get-fare`,
+      {
+        params: { pickup, destination },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    setFare(response.data);
 
     // }else   alert("add trip details")
-    
-     
-  
-    
-     
   }
 
+  // ride creation
+  async function createRide() {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/rides/create`,
+      {
+        pickup,
+        destination,
+        vehicleType,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    console.log(response.data);
+  }
 
-  // ride creation 
-   async function createRide() {
-        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
-            pickup,
-            destination,
-            vehicleType
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-        console.log(response.data);
-        
+  // socket hendiling
+  const { socket } = useContext(SocketContext);
+  const { user } = useContext(UserDataContext);
+
+  useEffect(() => {
+    socket.emit("join", { userType: "user", userId: user._id });
+  }, [user]);
+
+   socket.on('ride-confirmed', ride => {
 
 
-    }
+        setvehicalFound(false)
+        setwaitingForDriver(true)
+        setRide(ride)
+    })
+
+    socket.on('ride-started', ride => {
+        console.log("ride")
+        setwaitingForDriver(false)
+        navigate('/riding', { state: { ride } }) // Updated navigate to include ride data
+    })
+
+
+
+
 
 
 
@@ -198,9 +225,6 @@ function Home() {
     }
   }, [waitingForDriver]);
 
-
-  
-
   return (
     <div className=" h-screen  relative overflow-hidden">
       <img
@@ -261,7 +285,6 @@ function Home() {
             />
           </form>
           <button
-         
             onClick={findTrip}
             className="bg-black text-white px-4 py-2 rounded-lg mt-5 w-full"
           >
@@ -304,11 +327,12 @@ function Home() {
         className="fixed w-full  z-10 translate-y-full bottom-0 p-3 py-8 px-3 bg-white"
       >
         <ConfirmRide
-        pickup= {pickup}
-        destination={destination}
-        fare={fare}
-        vehicleType={vehicleType}
-        createRide={createRide}
+          pickup={pickup}
+          destination={destination}
+          fare={fare}
+          vehicleType={vehicleType}
+          
+          createRide={createRide}
           setConfirmRidePanel={setConfirmRidePanel}
           setvehicalFound={setvehicalFound}
         />
@@ -319,7 +343,13 @@ function Home() {
         ref={vehicalFoundRef}
         className="fixed w-full  z-10 translate-y-full bottom-0 p-3 py-8 px-3 bg-white"
       >
-        <LookingForDriver setvehicalFound={setvehicalFound} />
+        <LookingForDriver 
+          vehicleType={vehicleType}
+
+         pickup={pickup}
+          destination={destination}
+          fare={fare}
+        setvehicalFound={setvehicalFound} />
       </div>
 
       {/* Waiting For A driver */}
@@ -327,7 +357,11 @@ function Home() {
         ref={waitingForDriverRef}
         className="fixed w-full  z-10 translate-y-full bottom-0 p-3 py-8 px-3 bg-white"
       >
-        <WaitingForDriver setwaitingForDriver={setwaitingForDriver} />
+        <WaitingForDriver 
+        ride={ride}
+        setvehicalFound={setvehicalFound}
+
+        setwaitingForDriver={setwaitingForDriver} />
       </div>
     </div>
   );
