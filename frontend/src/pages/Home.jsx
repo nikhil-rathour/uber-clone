@@ -13,6 +13,7 @@ import { SocketContext } from "../context/SocketContext";
 import { UserDataContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import LiveTracking from "../components/LiveTracking";
+import { toast , ToastContainer } from "react-toastify";
 
 function Home() {
   const [pickup, setPickup] = useState("");
@@ -82,7 +83,7 @@ function Home() {
   // find trip function /
 
   async function findTrip() {
-    // if (pickup != "" && destination !="" ) {
+    if (pickup != "" && destination !="" ) {
 
     setpenalOpen(false);
     setvehicalPanelOpen(true);
@@ -98,7 +99,7 @@ function Home() {
 
     setFare(response.data);
 
-    // }else   alert("add trip details")
+    }else  toast.error("add trip details")
   }
 
   // ride creation
@@ -136,17 +137,10 @@ function Home() {
     })
 
     socket.on('ride-started', ride => {
-        console.log("ride")
+     
         setwaitingForDriver(false)
-        navigate('/riding', { state: { ride } }) // Updated navigate to include ride data
+        navigate('/riding', { state: { ride  , vehicleType} }) // Updated navigate to include ride data
     })
-
-
-
-
-
-
-
 
   // for location panel
   useGSAP(
@@ -154,20 +148,25 @@ function Home() {
       if (penalOpen) {
         gsap.to(panelRef.current, {
           height: "70%",
-          // opacity : "1"
           padding: 24,
+          duration: 0.4,
+          ease: "power3.out"
         });
         gsap.to(panelcloseRef.current, {
           opacity: "1",
+          duration: 0.3,
+          delay: 0.1
         });
       } else {
         gsap.to(panelRef.current, {
           height: "0",
-          // opacity : "0"
           padding: 0,
+          duration: 0.4,
+          ease: "power3.out"
         });
         gsap.to(panelcloseRef.current, {
           opacity: "0",
+          duration: 0.2
         });
       }
     },
@@ -179,10 +178,14 @@ function Home() {
     if (vehicalPanelOpen) {
       gsap.to(vehicalPanelRef.current, {
         transform: "translateY(0)",
+        duration: 0.5,
+        ease: "power3.out"
       });
     } else {
       gsap.to(vehicalPanelRef.current, {
         transform: "translateY(100%)",
+        duration: 0.5,
+        ease: "power3.out"
       });
     }
   }, [vehicalPanelOpen]);
@@ -192,10 +195,14 @@ function Home() {
     if (ConfirmRidePanel) {
       gsap.to(ConfermRideRef.current, {
         transform: "translateY(0)",
+        duration: 0.5,
+        ease: "power3.out"
       });
     } else {
       gsap.to(ConfermRideRef.current, {
         transform: "translateY(100%)",
+        duration: 0.5,
+        ease: "power3.out"
       });
     }
   }, [ConfirmRidePanel]);
@@ -206,10 +213,14 @@ function Home() {
     if (vehicalFound) {
       gsap.to(vehicalFoundRef.current, {
         transform: "translateY(0)",
+        duration: 0.5,
+        ease: "power3.out"
       });
     } else {
       gsap.to(vehicalFoundRef.current, {
         transform: "translateY(100%)",
+        duration: 0.5,
+        ease: "power3.out"
       });
     }
   }, [vehicalFound]);
@@ -218,78 +229,112 @@ function Home() {
     if (waitingForDriver) {
       gsap.to(waitingForDriverRef.current, {
         transform: "translateY(0)",
+        duration: 0.5,
+        ease: "power3.out"
       });
     } else {
-      gsap.to(waitingForDriver.current, {
+      gsap.to(waitingForDriverRef.current, {
         transform: "translateY(100%)",
+        duration: 0.5,
+        ease: "power3.out"
       });
     }
   }, [waitingForDriver]);
 
   return (
-    <div className=" h-screen  relative overflow-hidden">
-      <img
-        className="  w-20 absolute left-5 top-5"
-        src="https://cdn-assets-us.frontify.com/s3/frontify-enterprise-files-us/eyJwYXRoIjoicG9zdG1hdGVzXC9hY2NvdW50c1wvODRcLzQwMDA1MTRcL3Byb2plY3RzXC8yN1wvYXNzZXRzXC9lZFwvNTUwOVwvNmNmOGVmM2YzMjFkMTA3YThmZGVjNjY1NjJlMmVmMzctMTYyMDM3Nzc0OC5haSJ9:postmates:9KZWqmYNXpeGs6pQy4UCsx5EL3qq29lhFS6e4ZVfQrs?width=2400"
-        alt=""
-      />
-
-      <div className=" h-screen ">
-       <LiveTracking/>
+    <div className="h-screen relative overflow-hidden bg-gray-50">
+      {/* Header with Logo */}
+      <div className="absolute top-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-md shadow-sm">
+        <div className="flex items-center justify-between px-6 py-3">
+         
+           <img
+            className="w-16 h-10 object-contain"
+            src="https://cdn-assets-us.frontify.com/s3/frontify-enterprise-files-us/eyJwYXRoIjoicG9zdG1hdGVzXC9hY2NvdW50c1wvODRcLzQwMDA1MTRcL3Byb2plY3RzXC8yN1wvYXNzZXRzXC9lZFwvNTUwOVwvNmNmOGVmM2YzMjFkMTA3YThmZGVjNjY1NjJlMmVmMzctMTYyMDM3Nzc0OC5haSJ9:postmates:9KZWqmYNXpeGs6pQy4UCsx5EL3qq29lhFS6e4ZVfQrs?width=2400"
+            alt="Logo"
+          />
+       
+          <h3 className=" capitalize  font-medium">hey! {user?.fullname.firstname + " " + user?.fullname.lastname }</h3>
+        </div>
+        
       </div>
 
-      <div className=" flex flex-col justify-end h-screen absolute top-0 rounded-lg  w-full ">
-        <div className="h-[30%] p-6 bg-white  relative ">
-          <h3
-            ref={panelcloseRef}
-            className=" opacity-0 absolute top-6 right-6 text-2xl "
-            onClick={() => {
-              setpenalOpen(false);
-            }}
-          >
-            <i className="ri-arrow-down-wide-line"></i>
-          </h3>
+      {/* Map Container */}
+      <div className="h-screen pt-16">
+        <LiveTracking />
+         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick pauseOnFocusLoss draggable pauseOnHover />
+      </div>
 
-          <h4 className=" text-2xl font-semibold ">Find a trip </h4>
-          <form
-            onSubmit={(e) => {
-              hendelsubmit(e);
-            }}
-          >
-            <div className="line absolute h-16 w-1 top-[37%] left-10 bg-gray-950 rounded-full "></div>
-            <input
-              onClick={() => {
-                setpenalOpen(true);
-                setActiveField("pickup");
-              }}
-              value={pickup}
-              onChange={handlePickupChange}
-              className="bg-[#eee] px-12 py-2 text-base rounded-lg  mb-5 mt-3 shadow w-full"
-              type="text"
-              placeholder=" Add a pickup location"
-            />
+      {/* Main Panel Container */}
+      <div className="flex flex-col justify-end h-screen absolute top-0 w-full pointer-events-none">
+        {/* Trip Input Panel */}
+        <div className="bg-white rounded-t-3xl shadow-2xl pointer-events-auto relative">
+          {/* Panel Header */}
+          <div className="px-9 pt-10   border-gray-100">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xl font-bold text-gray-900">Where to?</h4>
+             
+            </div>
+             <button
+                ref={panelcloseRef}
+                onClick={() => setpenalOpen(false)}
+              >
+           <i className=" text-3xl ri-arrow-down-wide-fill"></i>
+              </button>
+          </div>
 
-            <input
-              onClick={() => {
-                setpenalOpen(true);
-                setActiveField("destination");
-              }}
-              value={destination}
-              onChange={handleDestinationChange}
-              className="bg-[#eee] px-12 py-2 text-base rounded-lg shadow w-full"
-              type="text"
-              placeholder=" Enter your destination"
-            />
-          </form>
-          <button
-            onClick={findTrip}
-            className="bg-black text-white px-4 py-2 rounded-lg mt-5 w-full"
-          >
-            Find Trip
-          </button>
+          {/* Trip Form */}
+          <div className="px-6 py-6">
+            <form onSubmit={hendelsubmit} className="space-y-4">
+              <div className="relative">
+                {/* Connection Line */}
+                <div className="absolute left-4 top-8 w-0.5 h-12  bg-gray-300  rounded-full"></div>
+                
+                {/* Pickup Location */}
+                <div className="relative flex items-center">
+                  <div className="absolute left-2 w-3 h-3 mb-4 bg-green-500 rounded-full z-10  "></div>
+                  <input
+                    onClick={() => {
+                      setpenalOpen(true);
+                      setActiveField("pickup");
+                    }}
+                    value={pickup}
+                    onChange={handlePickupChange}
+                    className="w-full pl-8 mb-5 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200"
+                    type="text"
+                    placeholder="Pickup location"
+                  />
+                </div>
+
+                {/* Destination */}
+                <div className="relative flex items-center">
+                  <div className="absolute left-2 w-3 h-3 bg-red-500 rounded-full z-10"></div>
+                  <input
+                    onClick={() => {
+                      setpenalOpen(true);
+                      setActiveField("destination");
+                    }}
+                    value={destination}
+                    onChange={handleDestinationChange}
+                    className="w-full pl-8 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all duration-200"
+                    type="text"
+                    placeholder="Where to?"
+                  />
+                </div>
+              </div>
+
+              {/* Find Trip Button */}
+              <button
+                onClick={findTrip}
+                className="w-full bg-black hover:bg-gray-800 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[0.98] active:scale-95 shadow-lg"
+              >
+                Find Trip
+              </button>
+            </form>
+          </div>
         </div>
 
-        <div ref={panelRef} className="bg-white h-[0] ">
+        {/* Location Search Panel */}
+        <div ref={panelRef} className="bg-white h-0 overflow-hidden pointer-events-auto">
           <LocationSearchPanel
             suggestions={
               activeField === "pickup"
@@ -303,62 +348,69 @@ function Home() {
         </div>
       </div>
 
-      {/* vihecal pricing penal  */}
-
+      {/* Vehicle Pricing Panel */}
       <div
         ref={vehicalPanelRef}
-        className="fixed w-full  z-10 translate-y-full bottom-0 p-3 py-8 px-3 bg-white"
+        className="fixed w-full z-30 translate-y-full bottom-0 bg-white rounded-t-3xl shadow-2xl"
       >
-        <VehicalPanel
-          setvehicalPanelOpen={setvehicalPanelOpen}
-          setConfirmRidePanel={setConfirmRidePanel}
-          fare={fare}
-          selectVehicle={setVehicleType}
-        />
+        <div className="p-6">
+          <VehicalPanel
+            setvehicalPanelOpen={setvehicalPanelOpen}
+            setConfirmRidePanel={setConfirmRidePanel}
+            fare={fare}
+            selectVehicle={setVehicleType}
+          />
+        </div>
       </div>
 
-      {/* confirm vehical(ride) panel */}
-
+      {/* Confirm Ride Panel */}
       <div
         ref={ConfermRideRef}
-        className="fixed w-full  z-10 translate-y-full bottom-0 p-3 py-8 px-3 bg-white"
+        className="fixed w-full z-30 translate-y-full bottom-0 bg-white rounded-t-3xl shadow-2xl"
       >
-        <ConfirmRide
-          pickup={pickup}
-          destination={destination}
-          fare={fare}
-          vehicleType={vehicleType}
-          
-          createRide={createRide}
-          setConfirmRidePanel={setConfirmRidePanel}
-          setvehicalFound={setvehicalFound}
-        />
+        <div className="p-6">
+          <ConfirmRide
+            pickup={pickup}
+            destination={destination}
+            fare={fare}
+            vehicleType={vehicleType}
+            createRide={createRide}
+            setConfirmRidePanel={setConfirmRidePanel}
+            setvehicalFound={setvehicalFound}
+          />
+        </div>
       </div>
 
-      {/* looking for a driver  */}
+      {/* Looking for Driver Panel */}
       <div
         ref={vehicalFoundRef}
-        className="fixed w-full  z-10 translate-y-full bottom-0 p-3 py-8 px-3 bg-white"
+        className="fixed w-full z-30 translate-y-full bottom-0 bg-white rounded-t-3xl shadow-2xl"
       >
-        <LookingForDriver 
-          vehicleType={vehicleType}
-
-         pickup={pickup}
-          destination={destination}
-          fare={fare}
-        setvehicalFound={setvehicalFound} />
+        <div className="p-6">
+          <LookingForDriver 
+            vehicleType={vehicleType}
+            pickup={pickup}
+            destination={destination}
+            fare={fare}
+            setvehicalFound={setvehicalFound} 
+          />
+        </div>
       </div>
 
-      {/* Waiting For A driver */}
+      {/* Waiting for Driver Panel */}
       <div
         ref={waitingForDriverRef}
-        className="fixed w-full  z-10 translate-y-full bottom-0 p-3 py-8 px-3 bg-white"
+        className="fixed w-full z-30 translate-y-full bottom-0 bg-white rounded-t-3xl shadow-2xl"
       >
-        <WaitingForDriver 
-        ride={ride}
-        setvehicalFound={setvehicalFound}
-
-        setwaitingForDriver={setwaitingForDriver} />
+        <div className="p-6">
+          <WaitingForDriver 
+            vehicleType={vehicleType}
+            
+            ride={ride}
+            setvehicalFound={setvehicalFound}
+            setwaitingForDriver={setwaitingForDriver} 
+          />
+        </div>
       </div>
     </div>
   );
