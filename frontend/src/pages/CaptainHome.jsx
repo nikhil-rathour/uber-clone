@@ -123,6 +123,22 @@ const CaptainHome = () => {
        
       
        <div className='h-screen'>
+           {/* Header with Logo */}
+      <div className="absolute top-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-md shadow-sm">
+        <div className="flex items-center justify-between px-6 py-3">
+         
+           <img
+            className="w-16 h-10 object-contain"
+            src="https://cdn-assets-us.frontify.com/s3/frontify-enterprise-files-us/eyJwYXRoIjoicG9zdG1hdGVzXC9hY2NvdW50c1wvODRcLzQwMDA1MTRcL3Byb2plY3RzXC8yN1wvYXNzZXRzXC9lZFwvNTUwOVwvNmNmOGVmM2YzMjFkMTA3YThmZGVjNjY1NjJlMmVmMzctMTYyMDM3Nzc0OC5haSJ9:postmates:9KZWqmYNXpeGs6pQy4UCsx5EL3qq29lhFS6e4ZVfQrs?width=2400"
+            alt="Logo"
+          />
+
+          <h3 className=" capitalize  font-medium">Hello captain! {captain?.fullname.firstname }</h3>
+
+       
+        </div>
+        
+      </div>
            <div className='fixed p-6 top-0 flex items-center justify-between w-screen'>
                 <img className='w-16' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
                 <Link to='/captain-home' className=' h-10 w-10 bg-white flex items-center justify-center rounded-full'>
