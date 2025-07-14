@@ -1,19 +1,36 @@
-# Uber Clone
+# Uber Clone 🚗
 
-A full-stack Uber Clone application that simulates ride-hailing features similar to the original Uber app. This project is structured with separate frontend and backend directories for modular development.
+A full-stack Uber Clone application that simulates ride-hailing features with separate frontend (React) and backend (Node.js/Express) directories.
 
-## Features
-- User authentication (login/signup)
-- Real-time ride requests and driver matching
-- Live map tracking
-- Ride history and receipts
-- Driver and rider profiles
-- Payment integration (simulated)
 
-## Tech Stack
-- **Frontend:** React, JavaScript/TypeScript, CSS/SCSS, Map APIs (e.g., Google Maps)
-- **Backend:** Node.js, Express, MongoDB/PostgreSQL, WebSockets
-- **Other:** JWT for authentication, RESTful APIs, Socket.io for real-time communication
+
+## Features ✨
+
+- **User Authentication**: Login/signup with JWT
+- **Real-time Ride System**: Ride requests and driver matching
+- **Live Map Tracking**: Google Maps integration
+- **Ride History**: Trip records and receipts
+- **Dual Profiles**: Driver and rider interfaces
+- **Payment Integration**: Simulated payment processing
+
+## Tech Stack 🛠️
+
+### Frontend
+- React
+- JavaScript/TypeScript
+- CSS/SCSS (Tailwind)
+- Google Maps API
+- Socket.io Client
+
+### Backend
+- Node.js
+- Express
+- MongoDB (Mongoose)
+- WebSockets (Socket.io)
+- JWT Authentication
+
+
+
 
 ## Folder Structure
 ```
