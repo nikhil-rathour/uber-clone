@@ -18,10 +18,33 @@ A full-stack Uber Clone application that simulates ride-hailing features similar
 ## Folder Structure
 ```
 uber-clone/
-├── frontend/   # Frontend React application
-├── backend/    # Backend API and services
-├── .gitignore
-└── README.md
+├── frontend/                # Frontend application (e.g., React)
+│   ├── public/              # Static assets
+│   ├── src/                 # Source code
+│   │   ├── components/      # Reusable UI components
+│   │   ├── pages/           # Page components/views
+│   │   ├── hooks/           # Custom React hooks
+│   │   ├── utils/           # Utility functions
+│   │   ├── App.js           # Main app component
+│   │   └── index.js         # Entry point
+│   ├── package.json         # Frontend dependencies and scripts
+│   └── ...                  # Other config files
+│
+├── backend/                 # Backend application (e.g., Node.js/Express)
+│   ├── src/                 # Source code
+│   │   ├── controllers/     # Route controllers
+│   │   ├── models/          # Database models/schemas
+│   │   ├── routes/          # API routes
+│   │   ├── middleware/      # Express middleware
+│   │   ├── utils/           # Utility functions
+│   │   ├── app.js           # Express app setup
+│   │   └── server.js        # Entry point
+│   ├── package.json         # Backend dependencies and scripts
+│   └── ...                  # Other config files
+│
+├── .gitignore               # Git ignore file
+├── README.md                # Project documentation
+└── ...                      # Other root-level files (e.g., LICENSE)
 ```
 
 ## Getting Started
