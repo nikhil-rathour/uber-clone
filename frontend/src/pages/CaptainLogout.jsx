@@ -18,7 +18,8 @@ const CaptainLogout =  () => {
     })
 
   return (
-   <h1>captain logout</h1>
+    <div>Loading.....</div>
+
   )
 }
 
