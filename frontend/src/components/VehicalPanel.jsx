@@ -2,62 +2,134 @@ import React from 'react'
 
 const VehicalPanel = (props) => {
   return (
-    <div>
+    <div className="relative">
+      {/* Close Button */}
+      <button 
+        onClick={() => props.setvehicalPanelOpen(false)}
+        className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-12 h-6 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center transition-colors duration-200"
+      >
+        <i className="ri-arrow-down-wide-fill text-gray-600 text-xl"></i>
+      </button>
 
-<h5 
-       onClick={()=>{props.setvehicalPanelOpen(false)}}
-       className='p-1 text-center  w-[90%] absolute top-0 '> <i className=" text-3xl ri-arrow-down-wide-fill"></i>
-       
-</h5>
-        <h2 className=' text-2xl font-semibold mb-4'>Choose a Vehicle</h2>
+      {/* Header */}
+      <div className="mb-6 pt-4">
+        <h2 className="text-xl font-bold text-gray-900">Choose a Vehicle</h2>
+        <p className="text-sm text-gray-500 mt-1">Select your preferred ride option</p>
+      </div>
 
-          <div  
-          onClick={()=>{
+      {/* Vehicle Options */}
+      <div className="space-y-3">
+        {/* Car Option */}
+        <div  
+          onClick={() => {
             props.setConfirmRidePanel(true)
             props.selectVehicle('car')
           }}
-          className=' flex border-2 active:border-black mb-2 rounded-xl w-full items-center justify-between'>
-          <img className='h-12' src="https://th.bing.com/th/id/OIP.ymjpxr4RPlwbLenCbbpYywHaE7?w=267&h=180&c=7&r=0&o=7&pid=1.7&rm=3" alt="" />
-          <div className='  w-1/2'>
-            <h4 className=' font-medium text-base '>UberGo<span><i className="  ml-2 ri-user-3-fill"></i></span>4</h4>
-            <p className=' font-medium text-sm'>2 mins away</p>
-            <p className='text-xs mb-1 text-gray-900'>Affordable, compact rides</p>
+          className="flex items-center justify-between p-4 bg-white border-2 border-gray-200 hover:border-gray-300 active:border-black rounded-xl cursor-pointer transition-all duration-200 hover:shadow-md"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
+              <img 
+                className="h-10 w-auto object-contain" 
+                src="https://th.bing.com/th/id/OIP.ymjpxr4RPlwbLenCbbpYywHaE7?w=267&h=180&c=7&r=0&o=7&pid=1.7&rm=3" 
+                alt="Car" 
+              />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h4 className="font-semibold text-gray-900">UberGo</h4>
+                <div className="flex items-center gap-1 text-gray-500">
+                  <i className="ri-user-3-fill text-sm"></i>
+                  <span className="text-sm">4</span>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mb-1">2 mins away</p>
+              <p className="text-xs text-gray-500">Affordable, compact rides</p>
+            </div>
           </div>
-          <h2 className='text-xl font-semibold m-2 '>₹{props.fare.car}</h2>
+          <div className="text-right">
+            {props.fare.car ? (
+              <h2 className="text-lg font-bold text-gray-900">₹{props.fare.car}</h2>
+            ) : (
+              <div className="animate-pulse h-6 w-16 bg-gray-200 rounded-md"></div>
+            )}
+          </div>
         </div>
 
+        {/* Moto Option */}
         <div 
-          onClick={()=>{
+          onClick={() => {
             props.setConfirmRidePanel(true)
             props.selectVehicle('moto')
-
           }}
-        className=' flex border-2 active:border-black mb-2 rounded-xl w-full items-center justify-between'>
-          <img className='h-12' src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_637/v1649231091/assets/2c/7fa194-c954-49b2-9c6d-a3b8601370f5/original/Uber_Moto_Orange_312x208_pixels_Mobile.png" alt="" />
-          <div className='  w-1/2'>
-            <h4 className=' font-medium text-base '>Moto<span><i className=" ml-2 ri-user-3-fill"></i></span>1</h4>
-            <p className=' font-medium text-sm'>2 mins away</p>
-            <p className='text-xs mb-1 text-gray-900'>Affordable, compact rides</p>
+          className="flex items-center justify-between p-4 bg-white border-2 border-gray-200 hover:border-gray-300 active:border-black rounded-xl cursor-pointer transition-all duration-200 hover:shadow-md"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
+              <img 
+                className="h-10 w-auto object-contain" 
+                src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,w_956,h_637/v1649231091/assets/2c/7fa194-c954-49b2-9c6d-a3b8601370f5/original/Uber_Moto_Orange_312x208_pixels_Mobile.png" 
+                alt="Moto" 
+              />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h4 className="font-semibold text-gray-900">Moto</h4>
+                <div className="flex items-center gap-1 text-gray-500">
+                  <i className="ri-user-3-fill text-sm"></i>
+                  <span className="text-sm">1</span>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mb-1">2 mins away</p>
+              <p className="text-xs text-gray-500">Affordable, compact rides</p>
+            </div>
           </div>
-          <h2 className='text-xl font-semibold m-2 '>₹{props.fare.moto}</h2>
+          <div className="text-right">
+            {props.fare.moto ? (
+              <h2 className="text-lg font-bold text-gray-900">₹{props.fare.moto}</h2>
+            ) : (
+              <div className="animate-pulse h-6 w-16 bg-gray-200 rounded-md"></div>
+            )}
+          </div>
         </div>
 
-          <div
-             onClick={()=>{
+        {/* Auto Option */}
+        <div
+          onClick={() => {
             props.setConfirmRidePanel(true)
             props.selectVehicle('auto')
-
           }}
-          className=' flex border-2 active:border-black mb-2 rounded-xl w-full items-center justify-between'>
-          <img className='h-12' src="https://clipart-library.com/2023/Uber_Auto_312x208_pixels_Mobile.png" alt="" />
-          <div className='  w-1/2'>
-            <h4 className=' font-medium text-base '>Auto<span><i className=" ml-2 ri-user-3-fill"></i></span>3</h4>
-            <p className=' font-medium text-sm'>2 mins away</p>
-            <p className='text-xs mb-1 text-gray-900'>Affordable, compact rides</p>
+          className="flex items-center justify-between p-4 bg-white border-2 border-gray-200 hover:border-gray-300 active:border-black rounded-xl cursor-pointer transition-all duration-200 hover:shadow-md"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-12 bg-gray-50 rounded-lg flex items-center justify-center">
+              <img 
+                className="h-10 w-auto object-contain" 
+                src="https://clipart-library.com/2023/Uber_Auto_312x208_pixels_Mobile.png" 
+                alt="Auto" 
+              />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h4 className="font-semibold text-gray-900">Auto</h4>
+                <div className="flex items-center gap-1 text-gray-500">
+                  <i className="ri-user-3-fill text-sm"></i>
+                  <span className="text-sm">3</span>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mb-1">2 mins away</p>
+              <p className="text-xs text-gray-500">Affordable, compact rides</p>
+            </div>
           </div>
-          <h2 className='text-xl font-semibold m-2 '>₹{props.fare.auto}</h2>
+          <div className="text-right">
+            {props.fare.auto ? (
+              <h2 className="text-lg font-bold text-gray-900">₹{props.fare.auto}</h2>
+            ) : (
+              <div className="animate-pulse h-6 w-16 bg-gray-200 rounded-md"></div>
+            )}
+          </div>
         </div>
-
+      </div>
     </div>
   )
 }
