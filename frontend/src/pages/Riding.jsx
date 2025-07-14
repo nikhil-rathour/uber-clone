@@ -36,6 +36,10 @@ const Riding = () => {
             socket.off("ride-ended")
         }
     }, [socket, navigate])
+    // logout
+      const handleLogout = () => {
+        navigate("/user/logout");
+    };
 
     return (
         <div className='h-screen'>
@@ -48,6 +52,15 @@ const Riding = () => {
                         alt="Logo"
                     />
                     <h3 className="capitalize font-medium">hey! {user?.fullname.firstname + " " + user?.fullname.lastname}</h3>
+
+                     <button 
+                    onClick={handleLogout}
+                    className='px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-200 flex items-center gap-2'
+                >
+                    <i className="ri-logout-circle-r-line"></i>
+                    <span>Logout</span>
+
+                </button>
                 </div>
             </div>
 

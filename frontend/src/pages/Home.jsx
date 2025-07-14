@@ -142,6 +142,12 @@ function Home() {
         navigate('/riding', { state: { ride  , vehicleType} }) // Updated navigate to include ride data
     })
 
+    //logout 
+
+      const handleLogout = () => {
+        navigate("/user/logout");
+    };
+
   // for location panel
   useGSAP(
     function () {
@@ -254,6 +260,14 @@ function Home() {
           />
        
           <h3 className=" capitalize  font-medium">hey! {user?.fullname.firstname + " " + user?.fullname.lastname }</h3>
+
+           <button 
+                    onClick={handleLogout}
+                    className='px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-200 flex items-center gap-2'
+                >
+                    <i className="ri-logout-circle-r-line"></i>
+                    <span>Logout</span>
+                </button>
         </div>
         
       </div>
